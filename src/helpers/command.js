@@ -7,16 +7,17 @@ import { sendMessage } from '../services/connect'
  * @constructor
  */
 
-export class Command {
-
+export const Command = {
   /**
    * Startet die Wiedergabe.
    * @returns {Command}
    */
   play () {
-    this.action = commands.PLAY
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY
+      })
+  },
 
   /**
    * Spielt einen Track im Kontext der AllTracks-PlayList ab.
@@ -24,10 +25,12 @@ export class Command {
    * @returns {Command}
    */
   playId (trackId) {
-    this.action = commands.PLAY_ID
-    this.trackId = trackId
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY_ID,
+        trackId: trackId
+      })
+  },
 
   /**
    * Springt zu einer Position bei der Wiedergabe
@@ -35,55 +38,67 @@ export class Command {
    * @returns {Command}
    */
   playFromPosition (position) {
-    this.action = commands.PLAY_FROM_POSITION
-    this.position = position
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY_FROM_POSITION,
+        position: position
+      })
+  },
 
   /**
    * Pausiert die Wiedergabe
    * @returns {Command}
    */
   pause () {
-    this.action = commands.PAUSE
-    return this
-  }
+    this.send(
+      {
+        action: commands.PAUSE
+      })
+  },
 
   /**
    * Stoppt die Wiedergabe.
    * @returns {Command}
    */
   stop () {
-    this.action = commands.STOP
-    return this
-  }
+    this.send(
+      {
+        action: commands.STOP
+      })
+  },
 
   /**
    * Wechselt zwischen Play und Pause.
    * @returns {Command}
    */
   togglePlayPause () {
-    this.action = commands.TOGGLE_PLAY_PAUSE
-    return this
-  }
+    this.send(
+      {
+        action: commands.TOGGLE_PLAY_PAUSE
+      })
+  },
 
   /**
    * Spielt den nächsten Titel ab.
    * @returns {Command}
    */
   playNext () {
-    this.action = commands.PLAY_NEXT
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY_NEXT
+      })
+  },
 
   /**
    * Spielt den vorigen Titel ab.
    * @returns {Command}
    */
   playPrevious () {
-    this.action = commands.PLAY_PREVIOUS
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY_PREVIOUS
+      })
+  },
 
   /**
    * Setzt den Shuffle-Modus.
@@ -91,10 +106,12 @@ export class Command {
    * @returns {Command}
    */
   setShuffle (shuffle) {
-    this.action = commands.SET_SHUFFLE
-    this.shuffle = shuffle
-    return this
-  }
+    this.send(
+      {
+        action: commands.SET_SHUFFLE,
+        shuffle: shuffle
+      })
+  },
 
   /**
    * Setzt den Wiederholungsmodus. "none" für keine Wiederholung, "track" für Datei wiederholen und "all" für alles
@@ -103,10 +120,12 @@ export class Command {
    * @returns {Command}
    */
   setRepeatMode (mode) {
-    this.action = commands.SET_REPEAT_MODE
-    this.repeatMode = mode
-    return this
-  }
+    this.send(
+      {
+        action: commands.SET_REPEAT_MODE,
+        repeatMode: mode
+      })
+  },
 
   /**
    * Setzt die Lautstärke
@@ -114,10 +133,12 @@ export class Command {
    * @returns {Command}
    */
   setVolume (volume) {
-    this.action = commands.SET_VOLUME
-    this.volume = volume
-    return this
-  }
+    this.send(
+      {
+        action: commands.SET_VOLUME,
+        volume: volume
+      })
+  },
 
   /**
    * Erstellt eine neue Playlist.
@@ -125,10 +146,12 @@ export class Command {
    * @returns {Command}
    */
   createPlaylist (name) {
-    this.action = commands.CREATE_PLAYLIST
-    this.name = name
-    return this
-  }
+    this.send(
+      {
+        action: commands.CREATE_PLAYLIST,
+        name: name
+      })
+  },
 
   /**
    * Löscht eine Playlist.
@@ -136,10 +159,12 @@ export class Command {
    * @returns {Command}
    */
   removePlaylist (playlistId) {
-    this.action = commands.REMOVE_PLAYLIST
-    this.playlistId = playlistId
-    return this
-  }
+    this.send(
+      {
+        action: commands.REMOVE_PLAYLIST,
+        playlistId: playlistId
+      })
+  },
 
   /**
    * Fügt eine Trackmenge zu einer Playlist hinzu.
@@ -148,11 +173,13 @@ export class Command {
    * @returns {Command}
    */
   addTracksToPlaylist (playlistId, trackIds) {
-    this.action = commands.ADD_TRACKS_TO_PLAYLIST
-    this.playlistId = playlistId
-    this.idList = trackIds
-    return this
-  }
+    this.send(
+      {
+        action: commands.ADD_TRACKS_TO_PLAYLIST,
+        playlistId: playlistId,
+        idList: trackIds
+      })
+  },
 
   /**
    * Entfernt eine Trackmenge von einer Playlist.
@@ -161,20 +188,24 @@ export class Command {
    * @returns {Command}
    */
   removeTracksFromPlaylist (playlistId, trackIds) {
-    this.action = commands.REMOVE_TRACKS_FROM_PLAYLIST
-    this.playlistId = playlistId
-    this.idList = trackIds
-    return this
-  }
+    this.send(
+      {
+        action: commands.REMOVE_TRACKS_FROM_PLAYLIST,
+        playlistId: playlistId,
+        idList: trackIds
+      })
+  },
 
   /**
    * Ruft den aktuellen Status ab.
    * @returns {Command}
    */
   getStatus () {
-    this.action = commands.GET_STATUS
-    return this
-  }
+    this.send(
+      {
+        action: commands.GET_STATUS
+      })
+  },
 
   /**
    * Spielt eine Playlist ab.
@@ -182,10 +213,12 @@ export class Command {
    * @returns {Command}
    */
   playPlaylist (playlistId) {
-    this.action = commands.PLAY_PLAYLIST
-    this.playlistId = playlistId
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY_PLAYLIST,
+        playlistId: playlistId
+      })
+  },
 
   /**
    * Spielt einen Track aus einer Playlist ab und setzt die Playlist als aktiv.
@@ -194,20 +227,24 @@ export class Command {
    * @returns {Command}
    */
   playTrackOfPlaylist (playlistId, trackId) {
-    this.action = commands.PLAY_TRACK_OF_PLAYLIST
-    this.playlistId = playlistId
-    this.trackId = trackId
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY_TRACK_OF_PLAYLIST,
+        playlistId: playlistId,
+        trackId: trackId
+      })
+  },
 
   /**
    * Ruft die gesamte Mediathek ab.
    * @returns {Command}
    */
   getLibrary () {
-    this.action = commands.GET_LIBRARY
-    return this
-  }
+    this.send(
+      {
+        action: commands.GET_LIBRARY
+      })
+  },
 
   /**
    * Setzt die Farbe
@@ -215,11 +252,13 @@ export class Command {
    * @returns {Command}
    */
   setColor (color) {
-    this.action = commands.SET_COLOR
-    this.color = color
-    this.smooth = false
-    return this
-  }
+    this.send(
+      {
+        action: commands.SET_COLOR,
+        color: color,
+        smooth: false
+      })
+  },
 
   /**
    * Setzt die Farbe.
@@ -229,13 +268,15 @@ export class Command {
    * @returns {Command}
    */
   setRGBColor (red, green, blue) {
-    this.action = commands.SET_RGBCOLOR
-    this.red = red
-    this.green = green
-    this.blue = blue
-    this.smooth = false
-    return this
-  }
+    this.send(
+      {
+        action: commands.SET_RGBCOLOR,
+        red: red,
+        green: green,
+        blue: blue,
+        smooth: false
+      })
+  },
 
   /**
    * Setzt die Helligkeit der weißen LED's
@@ -243,11 +284,13 @@ export class Command {
    * @returns {Command}
    */
   setWhiteBrightness (brightness) {
-    this.action = commands.SET_WHITE_BRIGHTNESS
-    this.brightness = brightness
-    this.smooth = false
-    return this
-  }
+    this.send(
+      {
+        action: commands.SET_WHITE_BRIGHTNESS,
+        brightness: brightness,
+        smooth: false
+      })
+  },
 
   /**
    * Setzt die Helligkeit von Animationen.
@@ -255,11 +298,13 @@ export class Command {
    * @returns {Command}
    */
   setAnimationBrightness (brightness) {
-    this.action = commands.SET_ANIMATION_BRIGHTNESS
-    this.brightness = brightness
-    this.smooth = false
-    return this
-  }
+    this.send(
+      {
+        action: commands.SET_ANIMATION_BRIGHTNESS,
+        brightness: brightness,
+        smooth: false
+      })
+  },
 
   /**
    * Setzt den Farbmodus
@@ -267,46 +312,56 @@ export class Command {
    * @returns {Command}
    */
   setColorMode (mode) {
-    this.action = commands.SET_COLOR_MODE
-    this.colorMode = mode
-    return this
-  }
+    this.send(
+      {
+        action: commands.SET_COLOR_MODE,
+        colorMode: mode
+      })
+  },
 
   /**
    * Fährt den Raspberry herunter.
    * @returns {Command}
    */
   shutdownRaspi () {
-    this.action = commands.SHUTDOWN_RASPI
-    return this
-  }
+    this.send(
+      {
+        action: commands.SHUTDOWN_RASPI
+      })
+  },
 
   /**
    * Startet den Raspberry neu.
    * @returns {Command}
    */
   rebootRaspi () {
-    this.action = commands.REBOOT_RASPI
-    return this
-  }
+    this.send(
+      {
+        action: commands.REBOOT_RASPI
+      })
+  },
 
   /**
    * Startet die Serveranwendung neu.
    * @returns {Command}
    */
   rebootServer () {
-    this.action = commands.REBOOT_SERVER
-    return this
-  }
+    this.send(
+      {
+        action: commands.REBOOT_RASPI
+      })
+  },
 
   /**
    * Beendet die Serveranwendung.
    * @returns {Command}
    */
   shutdownServer () {
-    this.action = commands.SHUTDOWN_SERVER
-    return this
-  }
+    this.send(
+      {
+        action: commands.SHUTDOWN_RASPI
+      })
+  },
 
   /**
    * Ruft den Wert einer Konfigurationsoption ab.
@@ -314,10 +369,12 @@ export class Command {
    * @returns {Command}
    */
   getConfig (name) {
-    this.action = commands.GET_CONFIG
-    this.name = name
-    return this
-  }
+    this.send(
+      {
+        action: commands.GET_CONFIG,
+        name: name
+      })
+  },
 
   /**
    * Setzt eine Konfigurationsoption
@@ -326,29 +383,35 @@ export class Command {
    * @returns {Command}
    */
   setConfig (name, value) {
-    this.action = commands.SET_CONFIG
-    this.name = name
-    this.value = value
-    return this
-  }
+    this.send(
+      {
+        action: commands.SET_CONFIG,
+        name: name,
+        value: value
+      })
+  },
 
   /**
    * Ruft die Liste der derzeitigen Einstellungen ab.
    * @returns {Command}
    */
   getConfigList () {
-    this.action = commands.GET_CONFIG_LIST
-    return this
-  }
+    this.send(
+      {
+        action: commands.GET_CONFIG_LIST
+      })
+  },
 
   /**
    * Ruft eine Liste aller möglichen Optionen ab.
    * @returns {Command}
    */
   getConfigOptions () {
-    this.action = commands.GET_CONFIG_OPTIONS
-    return this
-  }
+    this.send(
+      {
+        action: commands.GET_CONFIG_OPTIONS
+      })
+  },
 
   /**
    * Erstellt eine Playlist aus IDs und spielt diese ab.
@@ -359,16 +422,14 @@ export class Command {
    * @returns {Command}
    */
   playIdList (list, name, startId) {
-    this.action = commands.PLAY_ID_LIST
-    this.idList = list
-    this.name = name
-    if (startId !== undefined) {
-      this.trackId = startId
-    } else {
-      this.trackId = -1
-    }
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY_ID_LIST,
+        idList: list,
+        name: name,
+        trackId: startId !== undefined ? startId : -1
+      })
+  },
 
   /**
    * Fügt einen Track der Warteschlange hinzu.
@@ -376,10 +437,12 @@ export class Command {
    * @returns {Command}
    */
   addTracksToQueue (trackIds) {
-    this.action = commands.ADD_TRACKS_TO_QUEUE
-    this.idList = trackIds
-    return this
-  }
+    this.send(
+      {
+        action: commands.ADD_TRACKS_TO_QUEUE,
+        idList: trackIds
+      })
+  },
 
   /**
    * Entfernt Tracks von der Warteschlange.
@@ -387,10 +450,12 @@ export class Command {
    * @returns {Command}
    */
   removeTracksFromQueue (trackIds) {
-    this.action = commands.REMOVE_TRACKS_FROM_QUEUE
-    this.idList = trackIds
-    return this
-  }
+    this.send(
+      {
+        action: commands.REMOVE_TRACKS_FROM_QUEUE,
+        idList: trackIds
+      })
+  },
 
   /**
    * Spielt den angegebenen Song aus der Queue.
@@ -398,10 +463,12 @@ export class Command {
    * @returns {Command}
    */
   playTrackOfQueue (trackId) {
-    this.action = commands.PLAY_TRACK_OF_QUEUE
-    this.trackId = trackId
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY_TRACK_OF_QUEUE,
+        trackId: trackId
+      })
+  },
 
   /**
    * Spielt als nächstes den angegebenen Track ab.
@@ -409,20 +476,22 @@ export class Command {
    * @returns {Command}
    */
   playTrackNext (id) {
-    this.action = commands.PLAY_TRACK_NEXT
-    this.trackId = id
-    return this
-  }
+    this.send(
+      {
+        action: commands.PLAY_TRACK_NEXT,
+        trackId: id
+      })
+  },
 
   /**
    * Sendet den Befehl ab.
    * Das selbe wie <code>connect.send(command)</code>
    */
-  send () {
-    if (this.action.length === 0) {
+  send (obj) {
+    if (obj.action.length === 0) {
       throw new Error('Befehl nicht gesetzt!')
     }
-    sendMessage(this)
+    sendMessage(obj)
   }
 }
 
@@ -440,7 +509,7 @@ export class Command {
  *     ADD_TRACKS_TO_QUEUE: string, REMOVE_TRACKS_FROM_QUEUE: string, PLAY_TRACK_NEXT: string, PLAY_TRACK_OF_QUEUE:
  *     string}}
  */
-let commands = {
+const commands = {
   PLAY: 'play',
   PLAY_ID: 'playId',
   PLAY_FROM_POSITION: 'playFromPosition',

@@ -29,9 +29,11 @@
 </template>
 
 <script>
-  import Header from './components/Header.vue'
   import PlayerBar from './components/PlayerBar.vue'
   import DrawerMenu from './components/DrawerMenu.vue'
+  import { initSocket } from './services/connect'
+
+  initSocket()
 
   export default {
     name: 'app',
@@ -41,7 +43,6 @@
       }
     },
     components: {
-      Header,
       PlayerBar,
       DrawerMenu
     }

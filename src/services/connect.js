@@ -5,16 +5,16 @@ import { Status } from '../helpers/Status'
 import { showAlert } from '../helpers/util'
 import { Command } from '../helpers/command'
 
-let status = new Status()
-
+export const status = new Status()
+window.ss = status
 let hostName
 // timestamp in ms
 let connectTime = 0
 let socket
 
-export function init () {
+export function initSocket () {
   if (document.location.hostname === 'localhost') {
-    hostName = '192.168.1.102'
+    hostName = '192.168.1.103'
   } else {
     hostName = document.location.hostname
   }
@@ -40,13 +40,13 @@ function onOpen () {
   console.log('open')
   updateConnectionStatus('Connected')
   showAlert('Verbunden', 'Verbindung hergestellt.', 'success')
-  sendMessage(new Command().getLibrary())
+  sendMessage(Command.getLibrary())
 }
 
 function onMessage (e) {
   let answer = JSON.parse(e.data)
   console.log(answer)
-  let newTrack = connect.status.updateStatus(answer)
+  let newTrack = status.updateStatus(answer)
   if (answer.type === 'library') {
 
   }

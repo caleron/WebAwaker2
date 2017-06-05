@@ -9,7 +9,7 @@ import Vue from 'vue'
  * @param {String} type success, info, warning, danger
  */
 export function showAlert (title, message, type) {
-  let content = '<strong>' + title + '</strong><span style="margin-left:50px">' + message + '</span>'
+  let content = '<strong>' + title + '</strong><span class="pl-2">' + message + '</span>'
 
   switch (type) {
     case 'success':
@@ -143,6 +143,18 @@ export class Timer {
   isRunning () {
     return this.timer !== false
   }
+}
+
+/**
+ *
+ * @param {Map} map
+ */
+export function collectMapValues (map) {
+  let arr = []
+  for (let val of map.values()) {
+    arr.push(val)
+  }
+  return arr
 }
 
 // Skript um kaspersky xhr zu blocken

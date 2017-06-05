@@ -81,34 +81,40 @@ export class Status {
     }
 
     if (newStatus.type === 'library') {
-      let length = newStatus.tracks.length
-      this.tracks.clear()
-      this.albums.clear()
-      this.artists.clear()
-      for (let i = 0; i < length; i++) {
+      // TODO only collect tracks, collect artists and albums only when needed in components
+      let newTracks = new Map()
+      let newArtists = new Map()
+      let newAlbums = new Map()
+      for (let track of newStatus.tracks) {
         // in tracks einfügen, mit ID als key
-        this.tracks.set(newStatus.tracks[i].id, newStatus.tracks[i])
+        newTracks.set(track.id, track)
 
         // in artists einfügen, mit Künstlername als key und Artist-Objekt als value
-        if (newStatus.tracks[i].artist.length > 0) {
-          if (!this.artists.has(newStatus.tracks[i].artist)) {
-            var artist = new Artist()
-            artist.artist = newStatus.tracks[i].artist
-            this.artists.set(newStatus.tracks[i].artist, artist)
+        if (track.artist.length > 0) {
+          // create new artist if not exists
+          if (!newArtists.has(track.artist)) {
+            let artist = new Artist()
+            artist.artist = track.artist
+            newArtists.set(track.artist, artist)
           }
-          this.artists.get(newStatus.tracks[i].artist).trackList.push(newStatus.tracks[i])
+
+          newArtists.get(track.artist).trackList.push(track)
         }
         // in albums einfügen, mit Albumtitel als key und Album-Objekt als value
-        if (newStatus.tracks[i].album) {
-          if (!this.albums.has(newStatus.tracks[i].album)) {
-            var album = new Album()
-            album.album = newStatus.tracks[i].album
-            album.artist = newStatus.tracks[i].artist
-            this.albums.set(newStatus.tracks[i].album, album)
+        if (track.album) {
+          if (!newAlbums.has(track.album)) {
+            let album = new Album()
+            album.album = track.album
+            album.artist = track.artist
+            newAlbums.set(track.album, album)
           }
-          this.albums.get(newStatus.tracks[i].album).trackList.push(newStatus.tracks[i])
+          newAlbums.get(track.album).trackList.push(track)
         }
       }
+      this.albums = newAlbums
+      this.tracks = newTracks
+      this.artists = newArtists
+
       // Tracklisten bei Künstler und Alben sortieren
       let sortList = function (value) {
         value.trackList.sort(getSortFunc('title', 0))
@@ -118,18 +124,17 @@ export class Status {
       this.albums.forEach(sortList)
 
       // playlists einfügen
-      length = newStatus.playLists.length
-      this.playLists.clear()
+      let newPlaylists = new Map()
       let status = this
 
-      for (let i = 0; i < length; i++) {
-        let playList = newStatus.playLists[i]
+      for (let playList of newStatus.playLists) {
         playList.trackList = []
         playList.trackIdList.forEach(function (id) {
           playList.trackList.push(status.tracks.get(id))
         })
-        this.playLists.set(playList.id, playList)
+        newPlaylists.set(playList.id, playList)
       }
+      this.playLists = newPlaylists
       this.playLists.forEach(sortList)
     }
 
@@ -157,6 +162,57 @@ export class Status {
     }
     return RGBtoColorInt(r, g, b)
   }
+
+  getArtists () {
+    let artistArray = []
+
+    for (let track of this.tracks.values()) {
+      // in artists einfügen, mit Künstlername als key und Artist-Objekt als value
+      if (track.artist && track.artist.length > 0) {
+        // search for existing artist
+        let found = false
+        for (let art of artistArray) {
+          if (art.artist === track.artist) {
+            found = true
+            break
+          }
+        }
+        // add new artist if not exists
+        if (!found) {
+          let artist = new Artist()
+          artist.artist = track.artist
+          artistArray.push(artist)
+        }
+      }
+    }
+    return artistArray
+  }
+
+  getAlbums () {
+    let albumArray = []
+
+    for (let track of this.tracks.values()) {
+      // in artists einfügen, mit Künstlername als key und Artist-Objekt als value
+      if (track.album && track.album.length > 0) {
+        // search for existing artist
+        let found = false
+        for (let album of albumArray) {
+          if (album.album === track.album) {
+            found = true
+            break
+          }
+        }
+        // add new artist if not exists
+        if (!found) {
+          let album = new Album()
+          album.album = track.album
+          album.artist = track.artist
+          albumArray.push(album)
+        }
+      }
+    }
+    return albumArray
+  }
 }
 
 export function Track () {
@@ -181,13 +237,13 @@ export function Playlist () {
   this.trackList = []
 }
 
-function Album () {
+export function Album () {
   this.album = ''
   this.artist = ''
   this.trackList = []
 }
 
-function Artist () {
+export function Artist () {
   this.artist = ''
   this.trackList = []
 }
