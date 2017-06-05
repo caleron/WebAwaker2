@@ -1,29 +1,58 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
-    <b-alert variant="success" show>
-      Success Alert
-    </b-alert>
-  </div>
+  <v-app id="example-1">
+    <v-navigation-drawer persistent v-model="drawer" light enable-resize-watcher>
+      <v-list class="pa-0">
+        <v-list-item>
+          <v-list-tile avatar tag="ul"></v-list-tile>
+        </v-list-item>
+      </v-list>
+      <v-divider></v-divider>
+      <drawer-menu></drawer-menu>
+    </v-navigation-drawer>
+    <v-toolbar class="indigo" light>
+      <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>Toolbar</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon light>
+        <v-icon>search</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <main>
+      <v-container fluid class="pa-0">
+        <router-view></router-view>
+      </v-container>
+    </main>
+    <v-footer class="indigo">
+      <player-bar></player-bar>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+  import Header from './components/Header.vue'
+  import PlayerBar from './components/PlayerBar.vue'
+  import DrawerMenu from './components/DrawerMenu.vue'
 
-export default {
-  name: 'app'
-}
+  export default {
+    name: 'app',
+    data () {
+      return {
+        drawer: true
+      }
+    },
+    components: {
+      Header,
+      PlayerBar,
+      DrawerMenu
+    }
+  }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  #app {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
 </style>

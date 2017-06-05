@@ -19,3 +19,7 @@ npm run build --report
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+Maybe set assetsPublicPath in config/index.js on the build property to '/'
+
+https://github.com/vuejs/awesome-vue
