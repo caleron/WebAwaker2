@@ -1,12 +1,6 @@
 <template>
-  <v-app id="example-1">
-    <v-navigation-drawer persistent v-model="drawer" light enable-resize-watcher>
-      <v-list class="pa-0">
-        <v-list-item>
-          <v-list-tile avatar tag="ul"></v-list-tile>
-        </v-list-item>
-      </v-list>
-      <v-divider></v-divider>
+  <v-app>
+    <v-navigation-drawer persistent clipped v-model="drawer" light enable-resize-watcher class="pt-3">
       <drawer-menu></drawer-menu>
     </v-navigation-drawer>
     <v-toolbar class="indigo" light>
@@ -18,11 +12,11 @@
       </v-btn>
     </v-toolbar>
     <main>
-      <v-container fluid class="pa-0">
+      <v-container fluid class="pa-0" id="main-container">
         <router-view></router-view>
       </v-container>
     </main>
-    <v-footer class="indigo">
+    <v-footer class="indigo" id="main-footer">
       <player-bar></player-bar>
     </v-footer>
   </v-app>
@@ -49,11 +43,14 @@
   }
 </script>
 
-<style>
-  #app {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+<style lang="scss">
+  $footer-height: 50px;
+
+  #main-container {
+    min-height: calc(100vh - 56px - #{$footer-height});
+  }
+
+  #main-footer {
+    height: $footer-height;
   }
 </style>
