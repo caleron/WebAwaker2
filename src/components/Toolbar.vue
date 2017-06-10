@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar class="indigo" light>
+  <v-toolbar class="indigo" light fixed>
     <v-toolbar-side-icon light @click.native.stop="toggleClick"></v-toolbar-side-icon>
     <v-toolbar-title>{{ status.connectionStatus }}</v-toolbar-title>
     <v-spacer></v-spacer>
