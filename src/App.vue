@@ -44,7 +44,7 @@
 </script>
 
 <style lang="scss">
-  $footer-height: 50px;
+  $footer-height: 55px;
 
   #main-container {
     min-height: calc(100vh - 56px - #{$footer-height});
@@ -52,5 +52,9 @@
 
   #main-footer {
     height: $footer-height;
+  }
+
+  a {
+    text-decoration: none;
   }
 </style>

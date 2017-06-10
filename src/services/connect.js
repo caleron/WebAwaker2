@@ -5,6 +5,10 @@ import { Status } from '../helpers/Status'
 import { showAlert } from '../helpers/util'
 import { Command } from '../helpers/command'
 
+/**
+ *
+ * @type {Status}
+ */
 export const status = new Status()
 window.ss = status
 let hostName
