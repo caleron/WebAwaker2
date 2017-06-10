@@ -10,7 +10,7 @@
       </v-layout>
       <v-divider dark v-else-if="item.divider" class="my-4" :key="i"></v-divider>
       <router-link :to="item.link" v-else>
-        <v-list-item :key="i">
+        <v-list-item :key="i" class="drawer-link">
           <v-list-tile>
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
@@ -51,7 +51,14 @@
 
 <style scoped>
   .router-link-exact-active > li {
-    background: #8c9eff;
+    background: #1976d2;
   }
 
+  .router-link-exact-active div, .router-link-exact-active i {
+    color: white !important;
+  }
+
+  .drawer-link {
+    transition: .3s cubic-bezier(.25,.8,.25,1);
+  }
 </style>
