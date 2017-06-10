@@ -53,9 +53,9 @@ export function colorIntToRGB (color) {
  * @returns {string}
  */
 export function timeString (seconds) {
-  var hours = Math.floor(seconds / 3600)
+  const hours = Math.floor(seconds / 3600)
   seconds = seconds - hours * 3600
-  var mins = Math.floor(seconds / 60)
+  const mins = Math.floor(seconds / 60)
   seconds = seconds - mins * 60
   if (hours > 0) {
     return hours + ':' + leadingZero(mins) + ':' + leadingZero(seconds)
@@ -142,6 +142,44 @@ export class Timer {
    */
   isRunning () {
     return this.timer !== false
+  }
+
+  setRunning (run) {
+    if (run) {
+      this.start()
+    } else {
+      this.stop()
+    }
+  }
+}
+
+/**
+ * Debouncing function taken from https://davidwalsh.name/javascript-debounce-function
+ *
+ * Returns a function, that, as long as it continues to be invoked, will not
+ * be triggered. The function will be called after it stops being called for
+ * N milliseconds. If `immediate` is passed, trigger the function on the
+ * leading edge, instead of the trailing.
+ *
+ * @param func the function to execute
+ * @param wait time in ms to wait after the last call to trigger the given func
+ * @param immediate
+ * @returns {Function}
+ */
+export function debounce (func, wait, immediate) {
+  let timeout
+  return function () {
+    let context = this
+    let args = arguments
+
+    const later = function () {
+      timeout = null
+      if (!immediate) func.apply(context, args)
+    }
+    const callNow = immediate && !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    if (callNow) func.apply(context, args)
   }
 }
 
