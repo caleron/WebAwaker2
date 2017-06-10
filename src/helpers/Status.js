@@ -30,6 +30,7 @@ export class Status {
     this.artists = new Map()
     this.albums = new Map()
     this.trackQueue = []
+    this.connectionStatus = ''
 
     this.playPositionTimer = new Timer(() => { this.playPosition = Math.min(this.playPosition + 1, this.trackLength) }, 1000)
   }

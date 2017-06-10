@@ -7,13 +7,13 @@
     </div>
     <div class="center-box">
       <div class="playbar-title">
-        <span>{{ title }}</span> - <span class="playbar-artist">{{ artist }}</span>
+        <span>{{ status.currentTitle }}</span> - <span class="playbar-artist">{{ status.currentArtist }}</span>
       </div>
       <div class="progress-box">
-        <span>{{ playPositionStr }}</span>
-        <v-slider v-on:input="positionChanged" v-model="playPosition" dark thumb-label
-                  :max="trackLength" class="ma-0 px-3" :hide-details="true" style="flex-grow: 1;"></v-slider>
-        <span>{{ trackLengthStr }}</span>
+        <span>{{ timeString(status.playPosition) }}</span>
+        <v-slider v-on:input="positionChanged" v-model="status.playPosition" dark thumb-label
+                  :max="status.trackLength" class="ma-0 px-3" :hide-details="true" style="flex-grow: 1;"></v-slider>
+        <span>{{ timeString(status.trackLength) }}</span>
       </div>
     </div>
     <div>
@@ -34,44 +34,25 @@
   }, 500)
 
   export default {
+    name: 'player-bar',
     data () {
-      return {}
+      return {
+        status
+      }
     },
     computed: {
-      playPosition () {
-        return status.playPosition
-      },
-      playPositionStr () {
-        return timeString(status.playPosition)
-      },
-      trackLength () {
-        return status.trackLength
-      },
-      trackLengthStr () {
-        return timeString(status.trackLength)
-      },
-      title () {
-        return status.currentTitle
-      },
-      artist () {
-        return status.currentArtist
-      },
       repeatIcon () {
         return status.repeatMode === 'track' ? 'repeat_one' : 'repeat'
       },
       togglePlayPauseIcon () {
-        return status.playing ? 'play_arrow' : 'pause'
+        return status.playing ? 'pause' : 'play_arrow'
       }
     },
     methods: {
+      timeString,
       positionChanged (value) {
         status.playPositionTimer.stop()
         update(value)
-      },
-      positionChangeds (val, str, i) {
-        window.console.log(val)
-        window.console.log(str)
-        window.console.log(i)
       },
       toggleShuffle () {
         Command.setShuffle(!status.shuffle)

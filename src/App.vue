@@ -3,14 +3,7 @@
     <v-navigation-drawer persistent clipped v-model="drawer" light enable-resize-watcher class="pt-3">
       <drawer-menu></drawer-menu>
     </v-navigation-drawer>
-    <v-toolbar class="indigo" light>
-      <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Toolbar</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon light>
-        <v-icon>search</v-icon>
-      </v-btn>
-    </v-toolbar>
+    <toolbar @toggle="toggleDrawer"></toolbar>
     <main>
       <v-container fluid class="pa-0" id="main-container">
         <router-view></router-view>
@@ -25,20 +18,29 @@
 <script>
   import PlayerBar from './components/PlayerBar.vue'
   import DrawerMenu from './components/DrawerMenu.vue'
-  import { initSocket } from './services/connect'
-
-  initSocket()
+  import Toolbar from './components/Toolbar.vue'
+  import { status } from './services/connect'
 
   export default {
-    name: 'app',
     data () {
       return {
         drawer: true
       }
     },
+    methods: {
+      toggleDrawer () {
+        this.drawer = !this.drawer
+      }
+    },
+    computed: {
+      playPosition () {
+        return status.playPosition
+      }
+    },
     components: {
       PlayerBar,
-      DrawerMenu
+      DrawerMenu,
+      Toolbar
     }
   }
 </script>

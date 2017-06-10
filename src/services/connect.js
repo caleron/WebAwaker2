@@ -10,6 +10,7 @@ import { Command } from '../helpers/command'
  * @type {Status}
  */
 export const status = new Status()
+
 window.ss = status
 let hostName
 // timestamp in ms
@@ -30,7 +31,8 @@ function connect () {
     return
   }
 
-  updateConnectionStatus('Connecting...')
+  setConnectionStatus('Connecting...')
+
   connectTime = Date.now()
   socket = new WebSocket('ws://' + hostName + ':4733')
 
@@ -42,30 +44,25 @@ function connect () {
 
 function onOpen () {
   console.log('open')
-  updateConnectionStatus('Connected')
+  setConnectionStatus('Connected')
   showAlert('Verbunden', 'Verbindung hergestellt.', 'success')
-  sendMessage(Command.getLibrary())
+  Command.getLibrary()
 }
 
 function onMessage (e) {
   let answer = JSON.parse(e.data)
   console.log(answer)
-  let newTrack = status.updateStatus(answer)
-  if (answer.type === 'library') {
+  status.updateStatus(answer)
+}
 
-  }
-  if (answer.type === 'library' || answer.type === 'status') {
-    if (newTrack) {
-    }
-  }
-  if (answer.type === 'config') {
-  }
+function setConnectionStatus (value) {
+  status.connectionStatus = value
 }
 
 function onClose (e) {
   showAlert('Fehler', 'Verbindung getrennt. Verbinde neu...', 'danger')
 
-  updateConnectionStatus('Disconnected')
+  setConnectionStatus('Disconnected')
 
   if (Date.now() - connectTime > 5000) {
     connect()
@@ -82,11 +79,8 @@ function onError (e) {
 }
 
 export function sendMessage (command) {
+  console.log(command)
   let msg = JSON.stringify(command)
-  console.log(msg)
+  console.log('sending ' + msg)
   socket.send(msg)
-}
-
-function updateConnectionStatus (status) {
-
 }
