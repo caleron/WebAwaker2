@@ -49,11 +49,15 @@
   $footer-height: 55px;
 
   #main-container {
+    margin-bottom: $footer-height;
     min-height: calc(100vh - 56px - #{$footer-height});
   }
 
   #main-footer {
     height: $footer-height;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
   }
 
   a {
