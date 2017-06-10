@@ -2,7 +2,7 @@
  * Created by Patrick on 04.06.2017.
  */
 
-import { colorIntToRGB, getSortFunc, RGBtoColorInt, showAlert } from './util'
+import { colorIntToRGB, getSortFunc, RGBtoColorInt, showAlert, Timer } from './util'
 export class Status {
   constructor () {
     this.type = ''
@@ -30,6 +30,8 @@ export class Status {
     this.artists = new Map()
     this.albums = new Map()
     this.trackQueue = []
+
+    this.playPositionTimer = new Timer(() => { this.playPosition = Math.min(this.playPosition + 1, this.trackLength) }, 1000)
   }
 
   /**
@@ -62,6 +64,10 @@ export class Status {
       this.currentColor = newStatus.currentColor
       this.whiteBrightness = newStatus.whiteBrightness
       this.animationBrightness = newStatus.animationBrightness
+      /**
+       * track, all, none
+       * @type {string}
+       */
       this.repeatMode = newStatus.repeatMode
       this.shuffle = newStatus.shuffle
       this.volume = newStatus.volume
@@ -83,60 +89,22 @@ export class Status {
     if (newStatus.type === 'library') {
       // TODO only collect tracks, collect artists and albums only when needed in components
       let newTracks = new Map()
-      let newArtists = new Map()
-      let newAlbums = new Map()
       for (let track of newStatus.tracks) {
         // in tracks einfügen, mit ID als key
         newTracks.set(track.id, track)
-
-        // in artists einfügen, mit Künstlername als key und Artist-Objekt als value
-        if (track.artist.length > 0) {
-          // create new artist if not exists
-          if (!newArtists.has(track.artist)) {
-            let artist = new Artist()
-            artist.artist = track.artist
-            newArtists.set(track.artist, artist)
-          }
-
-          newArtists.get(track.artist).trackList.push(track)
-        }
-        // in albums einfügen, mit Albumtitel als key und Album-Objekt als value
-        if (track.album) {
-          if (!newAlbums.has(track.album)) {
-            let album = new Album()
-            album.album = track.album
-            album.artist = track.artist
-            newAlbums.set(track.album, album)
-          }
-          newAlbums.get(track.album).trackList.push(track)
-        }
       }
-      this.albums = newAlbums
       this.tracks = newTracks
-      this.artists = newArtists
-
-      // Tracklisten bei Künstler und Alben sortieren
-      let sortList = function (value) {
-        value.trackList.sort(getSortFunc('title', 0))
-      }
-
-      this.artists.forEach(sortList)
-      this.albums.forEach(sortList)
 
       // playlists einfügen
       let newPlaylists = new Map()
-      let status = this
 
       for (let playList of newStatus.playLists) {
-        playList.trackList = []
-        playList.trackIdList.forEach(function (id) {
-          playList.trackList.push(status.tracks.get(id))
-        })
         newPlaylists.set(playList.id, playList)
       }
       this.playLists = newPlaylists
-      this.playLists.forEach(sortList)
     }
+
+    this.playPositionTimer.setRunning(this.playing)
 
     return newTrack
   }
@@ -212,6 +180,37 @@ export class Status {
       }
     }
     return albumArray
+  }
+
+  /**
+   *
+   * @param {Playlist} playlist
+   * @returns {Array}
+   */
+  getPlaylistTracks (playlist) {
+    let status = this
+
+    // return already collected tracks if present
+    if (playlist.trackList.length === playlist.trackIdList.length) {
+      return playlist.trackList
+    }
+
+    playlist.trackIdList.forEach(function (id) {
+      playlist.trackList.push(status.tracks.get(id))
+    })
+    playlist.trackList.sort(getSortFunc('title', 0))
+    return playlist.trackList
+  }
+
+  getNextRepeatMode () {
+    switch (this.repeatMode) {
+      case 'none':
+        return 'track'
+      case 'track':
+        return 'all'
+      case 'all':
+        return 'none'
+    }
   }
 }
 
