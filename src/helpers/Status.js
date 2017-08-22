@@ -3,12 +3,26 @@
  */
 
 import { colorIntToRGB, getSortFunc, RGBtoColorInt, showAlert, Timer } from './util'
+
+/**
+ *
+ * @type {[{key: string, text: string}]}
+ */
+export const colorModes = [
+  {text: 'Music', key: 'music'},
+  {text: 'Color circle animation', key: 'colorCircle'},
+  {text: 'Custom color', key: 'custom'}]
+
 export class Status {
   constructor () {
     this.type = ''
     this.fileNotFound = false
     this.colorMode = 'music' // custom; colorCircle; music
-    this.currentColor = 0
+    /**
+     *
+     * @type {{r: number, g: number, b: number}}
+     */
+    this.currentColor = colorIntToRGB(0)
     this.whiteBrightness = 0
     this.animationBrightness = 100
     this.currentTitle = ''
@@ -62,7 +76,9 @@ export class Status {
       }
 
       this.colorMode = newStatus.colorMode
-      this.currentColor = newStatus.currentColor
+      this.currentColorInt = newStatus.currentColor
+      this.currentColor = colorIntToRGB(this.currentColorInt)
+
       this.whiteBrightness = newStatus.whiteBrightness
       this.animationBrightness = newStatus.animationBrightness
       /**
@@ -119,7 +135,7 @@ export class Status {
    * @returns {number}
    */
   getNewColor (r, g, b) {
-    let currentColor = colorIntToRGB(this.currentColor)
+    let currentColor = colorIntToRGB(this.currentColorInt)
     if (r < 0) {
       r = currentColor.r
     }
@@ -212,6 +228,15 @@ export class Status {
       case 'all':
         return 'none'
     }
+  }
+
+  getCurrentColorMode () {
+    for (let mode of colorModes) {
+      if (mode.key === this.colorMode) {
+        return mode
+      }
+    }
+    return colorModes[0]
   }
 }
 

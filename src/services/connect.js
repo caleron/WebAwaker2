@@ -15,6 +15,9 @@ window.ss = status
 let hostName
 // timestamp in ms
 let connectTime = 0
+/**
+ * @type {WebSocket}
+ */
 let socket
 
 export function initSocket () {
@@ -79,6 +82,10 @@ function onError (e) {
 }
 
 export function sendMessage (command) {
+  if (socket.readyState !== WebSocket.OPEN) {
+    console.log('did not send message: socket not open')
+    return
+  }
   console.log(command)
   let msg = JSON.stringify(command)
   console.log('sending ' + msg)

@@ -202,5 +202,5 @@ window.setTimeout = function (f, del) {
   if (lStack.indexOf('kis.scr.kaspersky-labs.com') > 0) {
     return 0
   }
-  window.setTimeoutOrig(f, del)
+  return window.setTimeoutOrig(f, del)
 }
